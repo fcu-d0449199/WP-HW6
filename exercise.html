@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<title>WP-HW6_exercise</title>
+
+<script>
+$(function(){
+    $.ajax({
+	url: "http://140.134.26.71:58080/web-prog/Hotels",
+	type: "GET",
+	dataType: "json",
+	success: function(data) {
+	    var items = data.Infos.Info;
+	    for(var i = 0; i< items.length; i++) {
+		var name = items[i].Name;
+		var imgURL = items[i].Picture1;
+		var website = items[i].Website;
+
+		var len = 50; // 超過50個字以"..."取代
+		if(items[i].Description.length>len){
+            		var text=items[i].Description.substring(0,len-1)+"...";
+		}
+		else{
+			var text= items[i].Description+"<br><br><br>";
+		}
+
+		var map = 'http://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=';
+		map = map + items[i].Add;
+		map = map + '&z=16&output=embed&t=';
+		map.src=map;
+		var map = document.getElementById('maps');
+		$("#attractions").append('<div id="'+i+'"> <table width="270"><tr><td align=center><a href = "'+website+'"><img src="'+imgURL+'"height="270" width="270" alt="無圖片可顯示!!"></a> <p align=center><b>'+name+'</b> <p align=left>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'+text+' <p align=left>電話: '+items[i].Tel+' <p align=left>地址: <a href="https://www.google.com.tw/maps/search/'+items[i].Add+'12z/data=!3m1!4b1?hl=zh-TW">'+items[i].Add+'</a> <br><input type="button" class="a" value="顯示位置"> </td></tr></table></div>');
+    	    }
+	},
+	error: function() {
+
+	}
+
+    });    	
+		
+});
+
+
+$(document).ready(function(){
+	$("#a").click(function(){
+		 with(document.all){
+			location.href=''+maps+'';
+		}
+	});
+});
+
+</script>
+
+<style>
+
+div{
+	float: left;
+
+	margin-left:25px;
+}
+
+body{
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-position:center top;
+} 
+</style>
+
+</head>
+
+<body background="http://www.baokhb.com/notice_bg3.jpg">
+
+<br>
+<br>
+	<table align=center width=300 border="3"><tr><td align=center><iframe id='maps' src="'+map+'" width="300" height="300" frameborder="0" style="border:0" fullscreen></iframe></td></tr></table>
+<br/>
+
+<div id="attractions">
+</div>
+</body>
+</html>
